@@ -1,39 +1,54 @@
 pipeline {
     agent any
 
+    environment {
+        // Define any necessary environment variables here
+    }
+
+    tools {
+        maven 'Maven' // Ensure 'Maven' is the name of the Maven installation configured in Jenkins
+    }
+
     stages {
-        stage('Clone Repository') {
+        stage('Checkout') {
             steps {
-                git 'https://github.com/shakilmunavary/AI-Powered-Jenkins-BuildFailure-Management.git'
+                // Checkout code from SCM
+                checkout scm
             }
         }
 
-        stage('Build with Maven') {
+        stage('Build') {
             steps {
-                sh 'mvn clean package'  // Corrected the typo here
+                script {
+                    // Use the correct Maven command
+                    sh 'mvn clean package'
+                }
             }
         }
 
-        stage('Run Tests') {
+        stage('Test') {
             steps {
-                sh 'mvn test'
+                script {
+                    // Run tests
+                    sh 'mvn test'
+                }
             }
         }
 
         stage('Deploy') {
             steps {
-                echo 'Deploying the application...'
-                // Add deployment steps here (e.g., copying .jar/.war files)
+                script {
+                    // Deploy the application
+                    sh 'mvn deploy'
+                }
             }
         }
     }
 
     post {
-        failure {
-            script {
-                // Print the error message
-                echo "Pipeline failed with error: ${currentBuild.rawBuild.getLog(100).join('\n')}"
-            }
+        always {
+            // Clean up workspace
+            cleanWs()
         }
     }
 }
