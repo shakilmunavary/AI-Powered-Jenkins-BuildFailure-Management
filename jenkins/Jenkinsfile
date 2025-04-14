@@ -1,51 +1,38 @@
 pipeline {
     agent any
+
     stages {
         stage('Clone Repository') {
             steps {
-                script {
-                    try {
-                        sh 'git clone https://github.com/shakilmunavary/AI-Powered-Jenkins-BuildFailure-Management.git'
-                    } catch (Exception e) {
-                        error "❌ Clone failed: ${e.message}"
-                    }
-                }
+                git 'https://github.com/shakilmunavary/AI-Powered-Jenkins-BuildFailure-Management.git'
             }
         }
-        
+
         stage('Build with Maven') {
             steps {
-                script {
-                    try {
-                        sh 'set -e; mvn clean package'  // ✅ Exits immediately if the command fails
-                    } catch (Exception e) {
-                        error "❌ Build failed: ${e.message}"
-                    }
-                }
+                sh 'mvn clean package'
             }
         }
 
         stage('Run Tests') {
             steps {
-                script {
-                    try {
-                        sh 'set -e; mvn test'
-                    } catch (Exception e) {
-                        error "❌ Tests failed: ${e.message}"
-                    }
-                }
+                sh 'mvn test'
             }
         }
 
         stage('Deploy') {
             steps {
-                script {
-                    try {
-                        sh 'set -e; ./deploy.sh'
-                    } catch (Exception e) {
-                        error "❌ Deployment failed: ${e.message}"
-                    }
-                }
+                echo 'Deploying the application...'
+                // Add deployment steps here (e.g., copying .jar/.war files)
+            }
+        }
+    }
+
+    post {
+        failure {
+            script {
+                // Print the error message
+                echo "Pipeline failed with error: ${currentBuild.rawBuild.getLog(100).join('\n')}"
             }
         }
     }
