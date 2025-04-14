@@ -10,7 +10,7 @@ pipeline {
 
         stage('Build with Maven') {
             steps {
-                sh 'mvnn clean package'
+                sh 'mvn clean package'
             }
         }
 
@@ -24,6 +24,15 @@ pipeline {
             steps {
                 echo 'Deploying the application...'
                 // Add deployment steps here (e.g., copying .jar/.war files)
+            }
+        }
+    }
+
+    post {
+        failure {
+            script {
+                // Print the error message
+                echo "Pipeline failed with error: ${currentBuild.rawBuild.getLog(100).join('\n')}"
             }
         }
     }
