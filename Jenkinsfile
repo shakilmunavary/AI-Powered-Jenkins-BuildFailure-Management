@@ -11,7 +11,7 @@ pipeline {
 
         stage('Build with Maven') {
             steps {
-                sh 'mvn clean package'  // Corrected the typo here
+                sh 'mvbbn clean package'  // Corrected the typo here
             }
         }
 
