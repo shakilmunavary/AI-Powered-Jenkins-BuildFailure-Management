@@ -161,12 +161,12 @@ AI-Powered-Jenkins-BuildFailure-Management/
 ### **5️⃣ Apply AI Fix**
 - One-click commit of recommended fixes to the repository.
 
----
 
 ## **🖼️ WebUI Screen**
-```
-![image](https://github.com/user-attachments/assets/c1ddd6e3-997a-48d0-b08d-a34540e9c311)
----
+-
+![image](https://github.com/user-attachments/assets/56a25e84-7005-420f-be9f-1d5c005cc4f7)
+
+-
 
 ## **🔎 Troubleshooting**
 ### ❌ **Jenkins API Authentication Issue**
