@@ -1,83 +1,246 @@
-Absolutely! Here's a **structured README file** for your **AI-powered GitHub Actions tool** using **Node.js** and **Mistral AI**.
+---
+
+# **AI-Powered Jenkins Build Failure Management Tool**  
+
+## **🚀 Introduction**  
+Managing Jenkins pipeline failures manually is time-consuming. This tool automates **failure detection, troubleshooting, and fixing using AI-powered recommendations**, making DevOps workflows more efficient.
+
+## **🔑 Key Features**
+✅ **Automated Build Failure Detection** – Identifies failed Jenkins builds.  
+✅ **AI-Powered Error Analysis** – Uses Mistral AI to analyze logs and suggest fixes.  
+✅ **Smart Jenkinsfile Corrections** – Extracts AI-suggested fixes and applies them.  
+✅ **One-Click Fix Application** – Pushes AI-generated Jenkinsfile updates to GitHub automatically.  
+✅ **Enhanced UI** – Displays AI recommendations and toggles for error logs.  
 
 ---
 
-## **README.md**
-
-🚀 Automate CI/CD pipeline fixes using AI! This tool analyzes failed GitHub Actions workflows, extracts error logs, sends them to Mistral AI, and automatically applies fixes to your repository—saving valuable developer time and effort.
-
-💡 Key Benefits: ✔ Boost Efficiency – Reduce manual debugging and let AI instantly detect and resolve pipeline failures. ✔ Minimize Downtime – Accelerate deployments by preventing bottlenecks in your CI/CD workflows. ✔ Improve Code Reliability – Get precise AI-driven fixes that enhance overall code quality. ✔ Seamless Integration – Works directly with GitHub Actions, ensuring a smooth DevOps experience. ✔ Adaptive Learning – AI continuously improves, offering smarter solutions over time.
-
----
-
-## **🔹 How This AI Tool Helps**
-- 🛠 **Detects CI/CD pipeline failures** and fetches logs.
-- 🤖 **Uses Mistral AI to analyze errors** and suggest corrections.
-- 🔄 **Automatically updates workflows** with AI-generated fixes.
-- 🔧 **Provides a dashboard** to monitor failures and AI suggestions.
-- ⚡ **Allows environment variable updates** dynamically—no restart needed!
+## **🛠 Prerequisites**
+Before installing, ensure you have the following:
+- **Ubuntu Server**
+- **Jenkins installed**
+- **GitHub repository with a Jenkinsfile**
+- **GitHub API token**
+- **Mistral AI API key**
+- **Node.js installed**
 
 ---
 
-## **📥 Installation Steps**
-### **1️⃣ Clone Repository**
+## **📥 Installation Guide**
+### **1️⃣ Install Jenkins on Ubuntu**
+#### **Step 1: Update and Install Java**
 ```bash
-git clone (https://github.com/shakilmunavary/ai-powered-buildFailure-management.git)
-cd ai-powered-buildFailure-management
+sudo apt update
+sudo apt install openjdk-11-jdk -y
+java -version  # Verify installation
+```
+#### **Step 2: Install Jenkins**
+```bash
+wget -q -O - https://pkg.jenkins.io/debian/jenkins.io.key | sudo apt-key add -
+sudo sh -c 'echo deb http://pkg.jenkins.io/debian-stable binary/ > /etc/apt/sources.list.d/jenkins.list'
+sudo apt update
+sudo apt install jenkins -y
+```
+#### **Step 3: Start & Enable Jenkins**
+```bash
+sudo systemctl start jenkins
+sudo systemctl enable jenkins
+```
+#### **Step 4: Access Jenkins**
+Navigate to:
+```
+http://yourIP:8080/
+```
+Retrieve the admin password:
+```bash
+sudo cat /var/lib/jenkins/secrets/initialAdminPassword
+```
+Follow the UI prompts to complete the setup.
+
+---
+
+### **2️⃣ Generate API Token for Jenkins**
+- **Login to Jenkins**
+- Navigate to **Manage Jenkins > Manage Users**
+- Click your username and go to **Configure**
+- Under **API Token**, click **Add new Token** and save it.
+
+---
+
+### **3️⃣ Setup GitHub Repository & API Token**
+#### **Step 1: Create a GitHub Repository**
+- Go to **GitHub** and create a repository.
+- Add a **Jenkinsfile** inside the repository.
+
+#### **Step 2: Generate GitHub Token**
+- Go to **GitHub > Developer Settings > Personal Access Tokens**
+- Click **Generate new token** with the following permissions:
+  - `repo`
+  - `workflow`
+  - `admin:repo_hook`
+- Save the token securely.
+
+---
+
+### **4️⃣ Get Mistral AI API Key**
+- Visit **[Mistral AI](https://mistral.ai/)**
+- Sign in and navigate to **API Keys**
+- Generate a new API key and store it securely.
+
+---
+
+### **5️⃣ Clone and Setup the Node.js Application**
+#### **Step 5: Clone Node.js Files from GitHub**
+```bash
+git clone https://github.com/shakilmunavary/AI-Powered-Jenkins-BuildFailure-Management.git
+cd AI-Powered-Jenkins-BuildFailure-Management/nodeJs
 ```
 
-### **2️⃣ Install Dependencies**
+#### **Step 6: Install Dependencies**
 ```bash
 npm install
 ```
 
-### **3️⃣ Configure Environment Variables**
-Create a `.env` file with:
-```bash
-GITHUB_TOKEN=your_github_token
-REPO_OWNER=your_github_username
-REPO_NAME=your_repo_name
-```
-Create `.env.mistral.ai` for Mistral API:
-```bash
-MISTRAL_API_KEY=your_mistral_api_key
-```
-
-### **4️⃣ Start the Application**
+#### **Step 7: Start the Server**
 ```bash
 node app.js
 ```
-Or use **nodemon**:
+
+---
+
+## **⚙️ Setting Up Environment Variables**
+Create two environment files with credentials:
+
+#### **`.env`**
 ```bash
-npx nodemon app.js
+JENKINS_URL=http://yourIP:8080/
+JENKINS_USER=xyz
+JENKINS_API_TOKEN=yourJenkinsToken
+JENKINS_JOB_NAME=SimpleTomcatApplication
+GITHUB_REPONAME=YourRepoWhereYouHaveJenkinsFile
+GITHUB_TOKEN=gitHubApiToken
+GITHUB_OWNERNAME=gitHubRepoOwnerName
+```
+#### **`.env.mistral.ai`**
+```bash
+MISTRAL_API_KEY=YourMistralApiKey
 ```
 
 ---
 
-## **🖥️ Usage**
-1️⃣ Visit `http://localhost:3002` to see failed GitHub Actions runs.  
-2️⃣ Click **"Allow AI to Fix the Issue"** to apply automatic fixes.  
-3️⃣ Update credentials via **Settings** without restarting the server.  
-4️⃣ GitHub Actions workflow updates dynamically with AI-suggested corrections.
+## **📂 Project Directory Structure**
+```
+AI-Powered-Jenkins-BuildFailure-Management/
+│── jenkins_logs/              # Stores logs and AI-generated Jenkinsfile fixes
+│── .env                        # Stores Jenkins & GitHub credentials
+│── .env.mistral.ai              # Stores Mistral AI credentials
+│── nodeJs/                      # Contains app.js and index.ejs
+│    ├── app.js                  # Main backend logic
+│    ├── index.ejs                # Frontend UI for displaying builds & AI recommendations
+│── package.json                  # Dependencies & metadata
+│── README.md                     # Documentation
+```
 
 ---
 
-## **🛠 Architecture Diagram**
-📌 The tool follows this workflow:
-```
-User Interface (index.ejs) → Backend (app.js) → GitHub Actions API → Mistral AI → Auto-Fix Pipelines
-```
-![image](https://github.com/user-attachments/assets/7c5b8f99-25bc-411f-ae90-96dc5a065723)
+## **📡 How It Works**
+### **1️⃣ Fetch Failed Builds**
+- Retrieves failed builds from Jenkins.
 
-## **🛠 UI Dashboard**
-<img width="944" alt="image" src="https://github.com/user-attachments/assets/2482537a-6e60-4238-a28f-43f195d711d6" />
+### **2️⃣ Download Error Logs**
+- Stores logs for AI analysis.
 
-![image](https://github.com/user-attachments/assets/cc71e18e-c61a-4d28-9fd1-940db64c300d)
+### **3️⃣ Fetch Existing Jenkinsfile**
+- Retrieves pipeline configuration from GitHub.
+
+### **4️⃣ Analyze & Recommend Fixes**
+- AI suggests optimized Jenkinsfile updates.
+
+### **5️⃣ Apply AI Fix**
+- One-click commit of recommended fixes to the repository.
 
 ---
 
+## **🖼️ Architecture Diagram**
+```
+                        ┌───────────────────────────┐
+                        │       User Requests       │
+                        ├───────────────────────────┤
+                        │ - Web UI (index.ejs)      │
+                        │ - Backend (app.js)       │
+                        └──────────────┬───────────┘
+                                       │
+┌──────────────────────────────────────────────────────────┐
+│  Jenkins Build Fetcher (app.js)                          │
+│  ─────────────────────────────────────────────────────── │
+│  - Fetches failed builds                                 │
+│  - Retrieves error logs                                  │
+└──────────────┬───────────────────────────────────────────┘
+               │
+┌──────────────────────────────────────────────────────────┐
+│  AI Error Analyzer (Mistral AI)                          │
+│  ─────────────────────────────────────────────────────── │
+│  - Analyzes logs                                         │
+│  - Suggests pipeline fixes                               │
+└──────────────┬───────────────────────────────────────────┘
+               │
+┌──────────────────────────────────────────────────────────┐
+│  Fix Storage & Application                               │
+│  ─────────────────────────────────────────────────────── │
+│  - Saves AI-generated Jenkinsfile                        │
+│  - Allows one-click GitHub commit                        │
+└──────────────┬───────────────────────────────────────────┘
+               │
+┌──────────────────────────────────────────────────────────┐
+│  GitHub Repository Integration                           │
+│  ─────────────────────────────────────────────────────── │
+│  - Stores Jenkinsfile fixes                              │
+│  - Automates commit & update                            │
+└──────────────────────────────────────────────────────────┘
+```
 
-## **👨‍💻 Contributing**
-Feel free to open issues, submit PRs, or suggest improvements!
+---
 
+## **🔎 Troubleshooting**
+### ❌ **Jenkins API Authentication Issue**
+- Ensure **valid API token** is generated in Jenkins.
 
+### ❌ **AI Fix Not Generated**
+- Verify `.env.mistral.ai` contains the correct **Mistral API Key**.
+- Ensure logs are **available** for AI analysis.
+
+### ❌ **Fix Not Applied to GitHub**
+- Ensure `GITHUB_TOKEN` has **repo access permissions**.
+- Verify the repository contains a **Jenkinsfile**.
+
+---
+
+## **🤝 Contributing**
+Want to contribute? Follow these steps:
+1. Fork the repository.
+2. Create a new branch:  
+   ```bash
+   git checkout -b feature-branch
+   ```
+3. Make updates and commit:  
+   ```bash
+   git commit -m "Added new feature"
+   ```
+4. Push to GitHub:  
+   ```bash
+   git push origin feature-branch
+   ```
+5. Submit a pull request.
+
+---
+
+## **📄 License**
+This project is licensed under **MIT License**.
+
+---
+
+## **📬 Support**
+Having trouble? **Open an issue** in the repository or contact **support@example.com**.
+
+---
+
+🚀 **Your README now covers everything needed for installation, configuration, architecture, troubleshooting, and deployment!** Let me know if you’d like any refinements. 👍
