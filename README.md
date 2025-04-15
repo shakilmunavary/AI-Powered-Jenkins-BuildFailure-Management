@@ -165,7 +165,8 @@ AI-Powered-Jenkins-BuildFailure-Management/
 
 ## **🖼️ WebUI Screen**
 ```
-                  ![image](https://github.com/user-attachments/assets/aa18b3f5-84af-4d8c-88ff-b62c01d6e12a)
+![image](https://github.com/user-attachments/assets/3b83b1aa-57b6-4fda-b667-e84977ddf551)
+
     
 ```
 
