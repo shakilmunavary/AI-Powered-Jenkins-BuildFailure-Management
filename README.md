@@ -2,6 +2,8 @@
 
 # **AI-Powered Jenkins Build Failure Management Tool**  
 
+![image](https://github.com/user-attachments/assets/c76027f7-b64b-4556-97f0-97d305bc9f46)
+
 ## **🚀 Introduction**  
 Managing Jenkins pipeline failures manually is time-consuming. This tool automates **failure detection, troubleshooting, and fixing using AI-powered recommendations**, making DevOps workflows more efficient.
 
