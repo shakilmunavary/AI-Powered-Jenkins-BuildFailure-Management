@@ -10,8 +10,9 @@ pipeline {
 
         stage('Build with Maven') {
             steps {
-                // sh 'mvn clean package'
-                sh 'mvn verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=ai-test_java-application'
+                withCredentials([string(credentialsId: 'sonar-token-id', variable: 'SONAR_TOKEN')]) {
+                    sh 'mvn verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=ai-test_java-application -Dsonar.token=$SONAR_TOKEN'
+                }
             }
         }
 
@@ -24,7 +25,6 @@ pipeline {
         stage('Deploy') {
             steps {
                 echo 'Deploying the application...'
-                // Add deployment steps here (e.g., copying .jar/.war files)
             }
         }
     }
@@ -32,7 +32,6 @@ pipeline {
     post {
         failure {
             script {
-                // Print the error message
                 echo "Pipeline failed with error: ${currentBuild.rawBuild.getLog(100).join('\n')}"
             }
         }
