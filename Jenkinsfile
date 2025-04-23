@@ -1,57 +1,38 @@
-groovy
 pipeline {
     agent any
 
-    environment {
-        APP_NAME = 'ABDC'
-        ENVIRONMENT = 'Dev'
-        REPO_URL = 'https://github.com/shakilmunavary/AI-Powered-Jenkins-BuildFailure-Management'
-        FILE_REPO = 'Jfrog'
-        TECH_STACK = 'Java'
-        TARGET_ENV = 'VM'
+    stages {
+        stage('Clone Repository') {
+            steps {
+                git 'https://github.com/shakilmunavary/AI-Powered-Jenkins-BuildFailure-Management.git'
+            }
+        }
+
+        stage('Build with Maven') {
+            steps {
+                withCredentials([string(credentialsId: 'SONAR_TOKEN', variable: 'SONAR_TOKEN')]) {
+                    sh 'mvn verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=ai-test_java-application -Dsonar.token=$SONAR_TOKEN'
+                }
+            }
+        }
+
+        stage('Run Tests') {
+            steps {
+                sh 'mvn test'
+            }
+        }
+
+        stage('Deploy') {
+            steps {
+                echo 'Deploying the application...'
+            }
+        }
     }
 
-    stages {
-        stage('Checkout') {
-            steps {
-                git url: REPO_URL
-            }
-        }
-
-        stage('Build') {
-            steps {
-                sh 'mvn clean package'
-            }
-        }
-
-        stage('Code Quality') {
-            steps {
-                script {
-                    withSonarQubeEnv('Sonar') {
-                        sh 'mvn sonar:sonar -Dsonar.projectKey=${APP_NAME}-${ENVIRONMENT}'
-                    }
-                }
-            }
-        }
-
-        stage('Artifact Deployment') {
-            steps {
-                sh 'jfrog rt upload "target/*.jar" ${FILE_REPO}/${APP_NAME}/${ENVIRONMENT}/'
-            }
-        }
-
-        stage('Deployment') {
-            steps {
-                script {
-                    def server = [:]
-                    server['name'] = TARGET_ENV
-                    server['hostname'] = '<TARGET_ENV_HOSTNAME>' // replace with actual hostname
-                    server['username'] = '<USERNAME>' // replace with actual username
-                    server['password'] = '<PASSWORD>' // replace with actual password or use Jenkins credentials
-                    server['allowAnyHostKey'] = true
-
-                    sshCommand remote: server, command: 'sudo systemctl restart ${APP_NAME}'
-                }
+    post {
+        failure {
+            script {
+                echo "Pipeline failed with error: ${currentBuild.rawBuild.getLog(100).join('\n')}"
             }
         }
     }
