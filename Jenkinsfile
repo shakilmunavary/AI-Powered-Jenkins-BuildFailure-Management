@@ -1,56 +1,57 @@
+groovy
 pipeline {
     agent any
 
     environment {
-        SONAR_HOST_URL = 'http://13.61.190.224:9000'
+        APP_NAME = 'ABDC'
+        ENVIRONMENT = 'Dev'
+        REPO_URL = 'https://github.com/shakilmunavary/AI-Powered-Jenkins-BuildFailure-Management'
+        FILE_REPO = 'Jfrog'
+        TECH_STACK = 'Java'
+        TARGET_ENV = 'VM'
     }
 
     stages {
-        stage('Clone Repository') {
+        stage('Checkout') {
             steps {
-                git 'https://github.com/shakilmunavary/AI-Powered-Jenkins-BuildFailure-Management.git'
+                git url: REPO_URL
             }
         }
 
-        stage('Build with Maven') {
+        stage('Build') {
             steps {
-                sh 'mvn clean install'
+                sh 'mvn clean package'
             }
         }
 
-        stage('Run Tests') {
+        stage('Code Quality') {
             steps {
-                sh 'mvn test'
-            }
-        }
-
-        stage('SonarQube Analysis') {
-            steps {
-                withCredentials([string(credentialsId: 'SONAR_TOKEN', variable: 'SONAR_TOKEN')]) {
-                    sh '''
-                        mvn sonar:sonar \
-                        -Dsonar.projectKey=AI-Test \
-                        -Dsonar.host.url=${SONAR_HOST_URL} \
-                        -Dsonar.token=$SONAR_TOKEN
-                    '''
+                script {
+                    withSonarQubeEnv('Sonar') {
+                        sh 'mvn sonar:sonar -Dsonar.projectKey=${APP_NAME}-${ENVIRONMENT}'
+                    }
                 }
             }
         }
 
-        stage('Deploy') {
+        stage('Artifact Deployment') {
             steps {
-                echo 'Deploying the application...'
+                sh 'jfrog rt upload "target/*.jar" ${FILE_REPO}/${APP_NAME}/${ENVIRONMENT}/'
             }
         }
-    }
 
-    post {
-        success {
-            echo "Pipeline completed successfully!"
-        }
-        failure {
-            script {
-                echo "Pipeline failed with error: ${currentBuild.rawBuild.getLog(100).join('\n')}"
+        stage('Deployment') {
+            steps {
+                script {
+                    def server = [:]
+                    server['name'] = TARGET_ENV
+                    server['hostname'] = '<TARGET_ENV_HOSTNAME>' // replace with actual hostname
+                    server['username'] = '<USERNAME>' // replace with actual username
+                    server['password'] = '<PASSWORD>' // replace with actual password or use Jenkins credentials
+                    server['allowAnyHostKey'] = true
+
+                    sshCommand remote: server, command: 'sudo systemctl restart ${APP_NAME}'
+                }
             }
         }
     }
