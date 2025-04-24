@@ -12,7 +12,7 @@ pipeline {
         stage('Build with Maven') {
             steps {
                 withCredentials([string(credentialsId: 'SONAR_TOKEN', variable: 'SONAR_TOKEN')]) {
-                    sh 'mvn verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=ai-test_java-application -Dsonar.token=$SONAR_TOKEN'
+                    sh 'mvn verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=SampleJavaMavenTest -Dsonar.token=$SONAR_TOKEN'
                 }
             }
         }
