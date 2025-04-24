@@ -8,7 +8,7 @@ pipeline {
             }
         }
 
-
+/*
         stage('Build with Maven') {
             steps {
                 withCredentials([string(credentialsId: 'SONAR_TOKEN', variable: 'SONAR_TOKEN')]) {
@@ -16,7 +16,7 @@ pipeline {
                 }
             }
         }
-
+*/
         
         stage('Run Tests') {
             steps {
