@@ -12,7 +12,7 @@ pipeline {
         stage('Build with Maven') {
             steps {
                 withCredentials([string(credentialsId: 'SONAR_TOKEN', variable: 'SONAR_TOKEN')]) {
-                    sh 'mvn clean verify sonar:sonar -Dsonar.projectKey=SampleJavaMavenTest -Dsonar.projectName=SampleJavaMavenTest -Dsonar.token=$SONAR_TOKEN'
+                    sh 'mvn clean verify sonar:sonar -Dsonar.projectKey=SampleJavaMavenTest -Dsonar.projectName=SampleJavaMavenTest -Dsonar.token=$SONAR_TOKEN -Dsonar.host.url=http://13.53.78.104:9000'
                 }
             }
         }
