@@ -14,15 +14,15 @@ pipeline {
             }
         }
 
-        stage('Deploy') {
-            steps {
-                echo 'Deploying the application...'
-                sh '''
-                      cd target
-                      sudo cp java-tomcat-maven-example.war /opt/tomcat/webapps
-                      
-                '''
+            stage('Deploy') {
+                steps {
+                    echo 'Deploying the application...'
+                    sh '''
+                       sudo cp target/java-tomcat-maven-example.war  /opt/tomcat/webapps/
+                       sudo chown tomcat:tomcat /opt/tomcat/webapps/java-tomcat-maven-example
+                    '''
+                }
             }
-        }
+
     }
 }
