@@ -18,7 +18,8 @@ pipeline {
             steps {
                 echo 'Deploying the application...'
                 sh '''
-                    ls -ltr
+                      cd target
+                      ls -ltr
                 '''
             }
         }
