@@ -19,7 +19,7 @@ pipeline {
                     echo 'Deploying the application...'
                     sh '''
                        sudo cp target/java-tomcat-maven-example.war  /opt/tomcat/webapps/
-                       sudo chown tomcat:tomcat /opt/tomcat/webapps/java-tomcat-maven-example
+                       
                     '''
                 }
             }
