@@ -18,7 +18,7 @@ pipeline {
             steps {
                 echo 'Deploying the application...'
                 sh '''
-                    ARTIFACT=$(find target -name "*.jar" | head -n 1)
+                    ARTIFACT=$(find target -name "java-tomcat-maven-example.war.jar" | head -n 1)
                     if [ -z "$ARTIFACT" ]; then
                       echo "ERROR: No JAR file found in target/ folder."
                       exit 1
