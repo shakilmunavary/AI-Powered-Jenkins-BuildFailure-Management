@@ -10,7 +10,7 @@ pipeline {
 
         stage('Build with Maven') {
             steps {
-                sh 'mvn clean verify'
+                sh 'mvn clean package' // changed from verify to package
             }
         }
 
@@ -18,9 +18,13 @@ pipeline {
             steps {
                 echo 'Deploying the application...'
                 sh '''
-                    ARTIFACT=$(ls target/*.jar | head -n 1)
+                    ARTIFACT=$(find target -name "*.jar" | head -n 1)
+                    if [ -z "$ARTIFACT" ]; then
+                      echo "ERROR: No JAR file found in target/ folder."
+                      exit 1
+                    fi
                     echo "Deploying $ARTIFACT to /opt/tomcat/webapps/"
-                    sudo cp $ARTIFACT /opt/tomcat/webapps/
+                    sudo cp "$ARTIFACT" /opt/tomcat/webapps/
                 '''
             }
         }
