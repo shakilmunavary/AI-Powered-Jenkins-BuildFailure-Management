@@ -8,33 +8,20 @@ pipeline {
             }
         }
 
-/*
         stage('Build with Maven') {
             steps {
-                withCredentials([string(credentialsId: 'SONAR_TOKEN', variable: 'SONAR_TOKEN')]) {
-                    sh 'mvn clean verify sonar:sonar -Dsonar.projectKey=SampleJavaMavenTest -Dsonar.projectName=SampleJavaMavenTest -Dsonar.token=$SONAR_TOKEN -Dsonar.host.url=http://13.53.78.104:9000'
-                }
-            }
-        }
-*/
-        
-        stage('Run Tests') {
-            steps {
-                sh 'mvn test'
+                sh 'mvn clean verify'
             }
         }
 
         stage('Deploy') {
             steps {
                 echo 'Deploying the application...'
-            }
-        }
-    }
-
-    post {
-        failure {
-            script {
-                echo "Pipeline failed with error: ${currentBuild.rawBuild.getLog(100).join('\n')}"
+                sh '''
+                    ARTIFACT=$(ls target/*.jar | head -n 1)
+                    echo "Deploying $ARTIFACT to /opt/tomcat/webapps/"
+                    sudo cp $ARTIFACT /opt/tomcat/webapps/
+                '''
             }
         }
     }
