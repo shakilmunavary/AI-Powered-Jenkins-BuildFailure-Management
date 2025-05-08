@@ -19,7 +19,8 @@ pipeline {
                 echo 'Deploying the application...'
                 sh '''
                       cd target
-                      ls -ltr
+                      sudo cp java-tomcat-maven-example.war /opt/tomcat/webapps
+                      
                 '''
             }
         }
