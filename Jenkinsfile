@@ -1,10 +1,14 @@
 pipeline {
     agent any
 
+    environment {
+        TOMCAT_WEBAPPS_DIR = '/opt/tomcat/webapps'
+    }
+
     stages {
         stage('Clone Repository') {
             steps {
-                git 'https://github.com/shakilmunavary/AI-Powered-Jenkins-BuildFailure-Management.git'
+                git url: 'https://github.com/shakilmunavary/AI-Powered-Jenkins-BuildFailure-Management.git', branch: 'master'
             }
         }
 
@@ -18,7 +22,7 @@ pipeline {
             steps {
                 echo 'Deploying the application...'
                 sh '''
-                   cp target/java-tomcat-maven-example.war /opt/tomcat/webapps/
+                   sudo cp target/java-tomcat-maven-example.war ${TOMCAT_WEBAPPS_DIR}/
                 '''
             }
         }
