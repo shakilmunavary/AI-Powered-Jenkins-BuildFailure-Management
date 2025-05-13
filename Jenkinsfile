@@ -4,7 +4,7 @@ pipeline {
     stages {
         stage('Clone Repository') {
             steps {
-                git 'https://github.com/shakilmunavary/AI-Powered-Jenkins-BuildFailure-Management.git'
+                gitda 'https://github.com/shakilmunavary/AI-Powered-Jenkins-BuildFailure-Management.git'
             }
         }
 
