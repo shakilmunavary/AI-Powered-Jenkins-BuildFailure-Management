@@ -8,13 +8,13 @@ pipeline {
     stages {
         stage('Clone Repository') {
             steps {
-                git url: 'https://github.com/shakilmunavary/AI-Powered-Jenkins-BuildFailure-Management.git', branch: 'master'
+                git url: 'https://github.com/shakilmunavary/AI-Powered-Jenkins-BuildFailure-Management', branch: 'master'
             }
         }
 
         stage('Build with Maven') {
             steps {
-                sh 'mvnnn clean package'
+                sh 'mvn clean package'
             }
         }
 
