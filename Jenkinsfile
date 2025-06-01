@@ -24,7 +24,7 @@ pipeline {
             steps {
                 echo 'Deploying the application...'
                 sh '''
-                    cp target/java-tomcat-maven-example.war ${TOMCAT_WEBAPPS_DIR}/
+                    sudo cp target/java-tomcat-maven-example.war ${TOMCAT_WEBAPPS_DIR}/
                 '''
             }
         }
