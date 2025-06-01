@@ -15,9 +15,9 @@ pipeline {
 
         stage('Build with Maven') {
             steps {
-                // Corrected the typo from 'mvnv' to 'mvn'
-                sh 'mvnd clean package'
-            } }
+                // Corrected the typo from 'mvnd' to 'mvn'
+                sh 'mvn clean package'
+            }
         }
 
         stage('Deploy') {
