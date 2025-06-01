@@ -17,7 +17,7 @@ pipeline {
             steps {
                 // Corrected the typo from 'mvnn' to 'mvn'
                 sh 'mvn clean package'
-            }
+            })
         }
 
         stage('Deploy') {
