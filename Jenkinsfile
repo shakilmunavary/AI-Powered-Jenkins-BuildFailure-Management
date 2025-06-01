@@ -15,16 +15,16 @@ pipeline {
 
         stage('Build with Maven') {
             steps {
-                // Corrected the typo from 'mvnn' to 'mvn'
-                sh 'mvnv clean package'
-            } }
+                // Corrected the typo from 'mvnv' to 'mvn'
+                sh 'mvn clean package'
+            }
         }
 
         stage('Deploy') {
             steps {
                 echo 'Deploying the application...'
                 sh '''
-                    sudo cp target/java-tomcat-maven-example.war ${TOMCAT_WEBAPPS_DIR}/
+                    cp target/java-tomcat-maven-example.war ${TOMCAT_WEBAPPS_DIR}/
                 '''
             }
         }
