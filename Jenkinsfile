@@ -15,16 +15,15 @@ pipeline {
 
         stage('Verify Maven Installation') {
             steps {
-                sh 'mvns --version'
+                sh 'mvn --version'
             }
         }
 
         stage('Build with Maven') {
             steps {
-                // Corrected the typo from 'mvnnn' to 'mvn'
-                sh 'mvdn clean package'
+                sh 'mvn clean package'
             }
-        } }
+        }
 
         stage('Deploy') {
             steps {
@@ -38,8 +37,10 @@ pipeline {
 
     post {
         always {
-            // Clean up the workspace
-            cleanWs()
+            script {
+                // Clean up the workspace
+                cleanWs()
+            }
         }
     }
 }
