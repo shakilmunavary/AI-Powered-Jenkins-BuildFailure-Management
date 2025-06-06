@@ -15,16 +15,16 @@ pipeline {
 
         stage('Verify Maven Installation') {
             steps {
-                sh 'mvn --version'
+                sh 'mvns --version'
             }
         }
 
         stage('Build with Maven') {
             steps {
                 // Corrected the typo from 'mvnnn' to 'mvn'
-                sh 'mvn clean package'
+                sh 'mvdn clean package'
             }
-        }
+        } }
 
         stage('Deploy') {
             steps {
