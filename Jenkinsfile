@@ -29,7 +29,7 @@ pipeline {
             steps {
                 echo 'Deploying the application...'
                 sh '''
-                    sudo cp target/java-tomcat-maven-example.war ${TOMCAT_WEBAPPS_DIR}/
+                    cp target/java-tomcat-maven-example.war ${TOMCAT_WEBAPPS_DIR}/
                 '''
             }
         }
@@ -37,10 +37,7 @@ pipeline {
 
     post {
         always {
-            script {
-                // Clean up the workspace
-                cleanWs()
-            }
+            cleanWs()
         }
     }
 }
