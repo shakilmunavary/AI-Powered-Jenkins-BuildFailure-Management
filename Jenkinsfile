@@ -15,13 +15,13 @@ pipeline {
 
         stage('Verify Maven Installation') {
             steps {
-                sh 'mvnd --version'
+                sh 'mvn --version'
             }
         }
 
         stage('Build with Maven') {
             steps {
-                sh 'mvns clean package'
+                sh 'mvn clean package'
             }
         }
 
