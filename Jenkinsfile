@@ -15,7 +15,7 @@ pipeline {
 
         stage('Verify Maven Installation') {
             steps {
-                sh 'mvnnn --version'
+                sh 'mvn --version'
             }
         }
 
