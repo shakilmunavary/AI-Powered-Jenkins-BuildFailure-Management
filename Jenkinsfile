@@ -18,7 +18,7 @@ pipeline {
             steps {
                 script {
                     try {
-                        sh 'mvn --version'
+                        sh 'mvnnn --version'
                     } catch (Exception e) {
                         error("Maven installation verification failed. Please ensure Maven is installed and in PATH.")
                     }
