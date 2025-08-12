@@ -1,26 +1,21 @@
-// Pipeline for test
-
 pipeline {
     agent any
 
     environment {
         TOMCAT_WEBAPPS_DIR = '/opt/tomcat/webapps'
-        PATH = "${env.PATH}:${env.MAVEN_HOME}/bin" // Add Maven to PATH
+        PATH = "${env.PATH}:${env.MAVEN_HOME}/bin"
+        GIT_TOOL = 'Default' // Explicitly specify Git tool
     }
 
     stages {
-        stage('Clone Repository') {
+        stage('Checkout') {
             steps {
-                // Specify Git tool if needed
-                git url: 'https://github.com/shakilmunavary/AI-Powered-Jenkins-BuildFailure-Management',
-                    branch: 'master',
-                    changelog: true
+                checkout scm // Using the built-in checkout step
             }
         }
 
         stage('Verify Maven Installation') {
             steps {
-                // Corrected Maven command and added error handling
                 script {
                     try {
                         sh 'mvn --version'
@@ -33,7 +28,6 @@ pipeline {
 
         stage('Build with Maven') {
             steps {
-                // Added Maven build with error handling
                 script {
                     try {
                         sh 'mvn clean package'
@@ -45,6 +39,9 @@ pipeline {
         }
 
         stage('Deploy') {
+            when {
+                expression { currentBuild.resultIsBetterOrEqualTo('SUCCESS') }
+            }
             steps {
                 echo 'Deploying the application...'
                 sh '''
@@ -59,9 +56,15 @@ pipeline {
             cleanWs()
         }
         failure {
-            // Send notification on failure
             echo 'Pipeline failed! Sending notification...'
             // Add your notification method here (email, Slack, etc.)
+            // Example for Slack notification:
+            // slackSend channel: '#build-notifications',
+            //     message: "Pipeline failed: ${env.JOB_NAME} ${env.BUILD_NUMBER}",
+            //     color: 'danger'
+        }
+        success {
+            echo 'Pipeline succeeded!'
         }
     }
 }
