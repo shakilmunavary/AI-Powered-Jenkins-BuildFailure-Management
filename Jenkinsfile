@@ -18,7 +18,7 @@ pipeline {
             steps {
                 script {
                     try {
-                        sh 'mvnnn --version'
+                        sh 'mvn --version' // Fixed typo from 'mvnnn' to 'mvn'
                     } catch (Exception e) {
                         error("Maven installation verification failed. Please ensure Maven is installed and in PATH.")
                     }
@@ -57,11 +57,10 @@ pipeline {
         }
         failure {
             echo 'Pipeline failed! Sending notification...'
-            // Add your notification method here (email, Slack, etc.)
             // Example for Slack notification:
-            // slackSend channel: '#build-notifications',
-            //     message: "Pipeline failed: ${env.JOB_NAME} ${env.BUILD_NUMBER}",
-            //     color: 'danger'
+            slackSend channel: '#build-notifications',
+                message: "Pipeline failed: ${env.JOB_NAME} ${env.BUILD_NUMBER}",
+                color: 'danger'
         }
         success {
             echo 'Pipeline succeeded!'
