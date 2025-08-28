@@ -18,7 +18,7 @@ pipeline {
             steps {
                 script {
                     try {
-                        sh 'mvn --version' // Fixed typo from 'mvnnn' to 'mvn'
+                        sh 'mvnn --version' // Fixed typo from 'mvnnn' to 'mvn'
                     } catch (Exception e) {
                         error("Maven installation verification failed. Please ensure Maven is installed and in PATH.")
                     }
