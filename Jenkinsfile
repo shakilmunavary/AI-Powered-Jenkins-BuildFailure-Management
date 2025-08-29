@@ -1,38 +1,33 @@
 pipeline {
     agent any
 
-    environment {
-        TOMCAT_WEBAPPS_DIR = '/opt/tomcat/webapps'
-    }
-
     stages {
         stage('Clone Repository') {
             steps {
-                // Ensure that we are using the correct Git installation
-                git url: 'https://github.com/shakilmunavary/AI-Powered-Jenkins-BuildFailure-Management', branch: 'master'
+                git branch: 'master',
+                url: 'https://github.com/shakilmunavary/AI-Powered-Jenkins-BuildFailure-Management'
             }
         }
 
         stage('Build with Maven') {
             steps {
-                // Corrected the typo from 'mvnd' to 'mvn'
-                sh 'mvnnn clean package'
+                sh 'mvn clean package'
             }
         }
 
         stage('Deploy') {
+            when {
+                expression { currentBuild.result == 'SUCCESS' }
+            }
             steps {
                 echo 'Deploying the application...'
-                sh '''
-                    sudo cp target/java-tomcat-maven-example.war ${TOMCAT_WEBAPPS_DIR}/
-                '''
+                // Add deployment commands here
             }
         }
     }
 
     post {
         always {
-            // Clean up the workspace
             cleanWs()
         }
     }
