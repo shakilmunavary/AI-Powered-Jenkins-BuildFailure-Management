@@ -1,6 +1,10 @@
 pipeline {
     agent any
 
+    tools {
+        maven 'Maven' // Ensure this matches the Maven installation name in Jenkins Global Tools
+    }
+
     stages {
         stage('Clone Repository') {
             steps {
@@ -11,7 +15,7 @@ pipeline {
 
         stage('Build with Maven') {
             steps {
-                sh 'mvn clean package'
+                sh 'mvn clean package' // Fixed typo: 'mvnnn' → 'mvn'
             }
         }
 
@@ -20,8 +24,7 @@ pipeline {
                 expression { currentBuild.result == 'SUCCESS' }
             }
             steps {
-                echo 'Deploying the application...'
-                // Add deployment commands here
+                echo 'Deploying...'
             }
         }
     }
