@@ -1,11 +1,6 @@
 pipeline {
     agent any
 
-    tools {
-        // Ensure Git and Maven are installed and specified
-        git 'Default'
-        maven 'Maven 3.8.1' // Ensure Maven is configured in Global Tool Configuration
-    }
 
     stages {
         stage('Clone Repository') {
