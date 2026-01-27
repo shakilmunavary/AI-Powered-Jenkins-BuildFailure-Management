@@ -1,40 +1,38 @@
 pipeline {
     agent any
-
-
+    tools {
+        maven 'Maven 3.8.1' // Ensure this matches the Maven installation configured in Jenkins
+    }
     stages {
         stage('Clone Repository') {
             steps {
                 git branch: 'master', url: 'https://github.com/shakilmunavary/AI-Powered-Jenkins-BuildFailure-Management'
             }
         }
-
         stage('Build with Maven') {
             steps {
-                sh 'mvnn clean package' // Corrected from 'mvnn' to 'mvn'
+                sh 'mvn clean package' // Corrected the typo from 'mvnn' to 'mvn'
             }
         }
-
         stage('Deploy') {
             when {
-                expression { currentBuild.result == null || currentBuild.result == 'SUCCESS' }
+                success()
             }
             steps {
-                echo 'Deploying Application...'
+                echo 'Deploying application...'
                 // Add deployment commands here
             }
         }
     }
-
     post {
         always {
             cleanWs()
         }
-        success {
-            echo 'Build and Deployment Successful!'
-        }
         failure {
             echo 'Build or Deployment Failed!'
+        }
+        success {
+            echo 'Build and Deployment Successful!'
         }
     }
 }
