@@ -1,8 +1,6 @@
 pipeline {
     agent any
-    tools {
-        maven 'Maven 3.8.1' // Ensure this matches the Maven installation configured in Jenkins
-    }
+
     stages {
         stage('Clone Repository') {
             steps {
