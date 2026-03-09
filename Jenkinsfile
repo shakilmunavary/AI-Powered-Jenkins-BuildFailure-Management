@@ -2,35 +2,29 @@ pipeline {
     agent any
 
     stages {
-        stage('Clone Repository') {
+        stage('Build') {
             steps {
-                git branch: 'master', url: 'https://github.com/shakilmunavary/AI-Powered-Jenkins-BuildFailure-Management'
+                echo 'Building...'
+                // Add build commands here
             }
         }
-        stage('Build with Maven') {
+
+        stage('Test') {
             steps {
-                sh 'mvn clean package' // Corrected the typo from 'mvnn' to 'mvn'
-            }
-        }
-        stage('Deploy') {
-            when {
-                success()
-            }
-            steps {
-                echo 'Deploying application...'
-                // Add deployment commands here
+                echo 'Testing...'
+                // Add test commands here
             }
         }
     }
+
     post {
-        always {
-            cleanWs()
+        success {
+            echo 'Build and tests succeeded!'
+            // Add success actions here
         }
         failure {
-            echo 'Build or Deployment Failed!'
-        }
-        success {
-            echo 'Build and Deployment Successful!'
+            echo 'Build or tests failed!'
+            // Add failure actions here
         }
     }
 }
